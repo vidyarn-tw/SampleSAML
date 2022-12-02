@@ -1,0 +1,23 @@
+<h1>Articles</h1>
+
+Our blog has <%= Article.public_count %> articles and counting!
+
+<ul>
+  <% @articles.each do |article| %>
+    <% unless article.archived? %>
+      <li>
+        <!--      <a href="/articles/<%#= article.id %>">-->
+        <!--      <a href="<%#= article_path(article) %>">-->
+        <%#= article.title %>
+        <!--      </a>-->
+        <%= link_to article.title, article %>
+      </li>
+    <% end %>
+  <% end %>
+</ul>
+
+<%= link_to "New Article", new_article_path %>
+
+<a href="https://dev-28219840.okta.com/app/dev-28219840_mysamldummyapp_1/exk7ds6bfkPLszKNm5d7/sso/saml">
+  Login with SAML
+</a>
