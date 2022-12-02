@@ -1,11 +1,17 @@
 class ArticlesController < ApplicationController
 
-  http_basic_authenticate_with name: "dhh", password: "secret", except: [:index, :show]
+  skip_before_action :verify_authenticity_token
 
   def index
     @articles = Article.all
   end
-
+  def saml_callback
+    @articles = Article.all
+    # render "articles/index"
+    # print(Hash.from_xml(Base64.decode64(request.params[:SAMLResponse])))
+    print(request.env['omniauth.auth'].uid) # request.env['omniauth.auth'] contains already decoded saml response
+    redirect_to action: "index"
+  end
   def show
     @article = Article.find(params[:id])
   end

@@ -8,5 +8,5 @@ Rails.application.routes.draw do
   end
   # get "articles", to: "articles#index"
   # get "articles/:id", to: "articles#show"
-  post "auth/saml/callback", to: "articles#index"
+  post "auth/saml/callback", to: "articles#saml_callback"
 end
