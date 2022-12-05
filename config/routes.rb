@@ -8,15 +8,14 @@ Rails.application.routes.draw do
   end
   # get "articles", to: "articles#index"
   # get "articles/:id", to: "articles#show"
-  # post "auth/saml/callback", to: "articles#saml_callback"
 
   match '/auth/saml/:identity_provider_id/callback',
         via: [:get, :post],
         to: 'articles#saml_callback',
         as: 'user_omniauth_callback'
 
-  match '/auth/saml/:identity_provider_id',
-        via: [:get, :post],
-        to: 'articles#passthru',
-        as: 'user_omniauth_authorize'
+  # match '/auth/saml/:identity_provider_id',
+  #       via: [:get, :post],
+  #       to: 'articles#passthru',
+  #       as: 'user_omniauth_authorize'
 end
