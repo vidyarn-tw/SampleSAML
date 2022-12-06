@@ -14,8 +14,8 @@ Rails.application.routes.draw do
         to: 'articles#saml_callback',
         as: 'user_omniauth_callback'
 
-  # match '/auth/saml/:identity_provider_id',
-  #       via: [:get, :post],
-  #       to: 'articles#passthru',
-  #       as: 'user_omniauth_authorize'
+  match '/auth/saml/:identity_provider_id',
+        via: [:get, :post],
+        to: 'articles#sp_initiated_login',
+        as: 'user_omniauth_authorize'
 end

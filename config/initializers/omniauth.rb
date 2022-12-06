@@ -1,27 +1,11 @@
-
-
-Rails.application.config.middleware.use OmniAuth::Builder do
-  OmniAuth::MultiProvider.register(self,
-                                   provider_name: :saml,
-                                   identity_provider_id_regex: /\w+/,
-                                   path_prefix: '/auth/saml',
-                                   callback_suffix: 'callback',
-                                   # Specify any additional provider specific options
-                                   name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
-                                   issuer: 'apollo.io',
-                                   allowed_clock_drift: 5.seconds) do |identity_provider_id, rack_env|
-    # identity_provider = SAML::IdentityProvider.find(identity_provider_id)
-
-    # rack_env['apollo.saml_identity_provider'] = identity_provider
-    # identity_provider.options
-    map_of_opts = {
-      :exk7e2ybcuv3mjudc5d7 => {
-        # :provider=> :saml,
-        # :assertion_consumer_service_url     => "consumer_service_url",
-        :sp_entity_id                       => "exk7e2ybcuv3mJUdc5d7",
-        :idp_sso_service_url                => "https://dev-27371526.okta.com/app/dev-27371526_samplesamlapp_1/exk7e2ybcuv3mJUdc5d7/sso/saml",
-        # :idp_sso_service_url_runtime_params => {:original_request_param => :mapped_idp_param},
-        :idp_cert                           => "-----BEGIN CERTIFICATE-----
+SAML_SETTINGS =  {
+  :company_vidya => {
+    # :provider=> :saml,
+    # :assertion_consumer_service_url     => "consumer_service_url",
+    :sp_entity_id                       => "company_vidya",
+    :idp_sso_service_url                => "https://dev-27371526.okta.com/app/dev-27371526_samplesamlapp_1/exk7e2ybcuv3mJUdc5d7/sso/saml",
+    # :idp_sso_service_url_runtime_params => {:original_request_param => :mapped_idp_param},
+    :idp_cert                           => "-----BEGIN CERTIFICATE-----
 MIIDqDCCApCgAwIBAgIGAYStGtr3MA0GCSqGSIb3DQEBCwUAMIGUMQswCQYDVQQGEwJVUzETMBEG
 A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
 MBIGA1UECwwLU1NPUHJvdmlkZXIxFTATBgNVBAMMDGRldi0yNzM3MTUyNjEcMBoGCSqGSIb3DQEJ
@@ -40,20 +24,20 @@ T+EJQ4wC3rONwPaJdKpATmy3zogojOfMOnb/kQb7Z59CKv7Zj9KD1xAvNLZG7mh0+e/JfkkzIFMX
 36QMrhUVluva2CsrKrgHTyoNiENK/3e9w6nrzYTZaGd+VNsf5H6hNBnz+Va3EZof31RGIk7o2WPy
 S+/5+/c5AyVLmgHmkKXpnOA2wH9OeJLyXq5+5w==
 -----END CERTIFICATE-----",
-        # :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", # this also seems useful as it adds required name id format to sp metadata url: http://localhost:3000/auth/saml/metadata
-        :attribute_service_name=>"Custom Required Attributes", # he sp metadata will add this name for requested attributes, default is "Required Attributes"
-        :request_attributes=>  [ # changes sp metadata to only request the following fields.
-          { :name => 'team', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Apollo Team' },
-          { :name => 'group', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Belongs to Groups' },
-        ]
-      },
-      :exk7ds6bfkplszknm5d7 => {
-                  # :provider=> :saml,
-                   # :assertion_consumer_service_url     => "consumer_service_url",
-                   :sp_entity_id                       => "exk7ds6bfkPLszKNm5d7",
-                   :idp_sso_service_url                => "https://dev-28219840.okta.com/app/dev-28219840_mysamldummyapp_1/exk7ds6bfkPLszKNm5d7/sso/saml",
-                   # :idp_sso_service_url_runtime_params => {:original_request_param => :mapped_idp_param},
-                   :idp_cert                           => "-----BEGIN CERTIFICATE-----
+    # :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", # this also seems useful as it adds required name id format to sp metadata url: http://localhost:3000/auth/saml/metadata
+    :attribute_service_name=>"Custom Required Attributes", # he sp metadata will add this name for requested attributes, default is "Required Attributes"
+    :request_attributes=>  [ # changes sp metadata to only request the following fields.
+      { :name => 'team', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Apollo Team' },
+      { :name => 'group', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Belongs to Groups' },
+    ]
+  },
+  :company_naeem => {
+    # :provider=> :saml,
+    # :assertion_consumer_service_url     => "consumer_service_url",
+    :sp_entity_id                       => "company_naeem",
+    :idp_sso_service_url                => "https://dev-28219840.okta.com/app/dev-28219840_mysamldummyapp_1/exk7ds6bfkPLszKNm5d7/sso/saml",
+    # :idp_sso_service_url_runtime_params => {:original_request_param => :mapped_idp_param},
+    :idp_cert                           => "-----BEGIN CERTIFICATE-----
         MIIDqDCCApCgAwIBAgIGAYSpBdDmMA0GCSqGSIb3DQEBCwUAMIGUMQswCQYDVQQGEwJVUzETMBEG
         A1UECAwKQ2FsaWZvcm5pYTEWMBQGA1UEBwwNU2FuIEZyYW5jaXNjbzENMAsGA1UECgwET2t0YTEU
         MBIGA1UECwwLU1NPUHJvdmlkZXIxFTATBgNVBAMMDGRldi0yODIxOTg0MDEcMBoGCSqGSIb3DQEJ
@@ -72,15 +56,30 @@ S+/5+/c5AyVLmgHmkKXpnOA2wH9OeJLyXq5+5w==
         g3I8hlhHtG5O3nsiQtN3AcVPMuEnTNaunmsBqTW4KMFxhlQRY7j8HcaHGjHOVjejAoBeXeYBfIDa
         b18uR5DiEuNoJMq1ksFwMsjg71slFSEJ8Pkw4Q==
         -----END CERTIFICATE-----",
-                   # :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", # this also seems useful as it adds required name id format to sp metadata url: http://localhost:3000/auth/saml/metadata
-                   :attribute_service_name=>"Custom Required Attributes", # he sp metadata will add this name for requested attributes, default is "Required Attributes"
-                   :request_attributes=>  [ # changes sp metadata to only request the following fields.
-                     { :name => 'team', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Apollo Team' },
-                     { :name => 'group', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Belongs to Groups' },
-                   ]
-        }
-    }
-    map_of_opts[identity_provider_id.to_sym]
+    # :name_identifier_format             => "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress", # this also seems useful as it adds required name id format to sp metadata url: http://localhost:3000/auth/saml/metadata
+    :attribute_service_name=>"Custom Required Attributes", # he sp metadata will add this name for requested attributes, default is "Required Attributes"
+    :request_attributes=>  [ # changes sp metadata to only request the following fields.
+      { :name => 'team', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Apollo Team' },
+      { :name => 'group', :name_format => 'urn:oasis:names:tc:SAML:2.0:attrname-format:basic', :friendly_name => 'Belongs to Groups' },
+    ]
+  }
+}
+
+Rails.application.config.middleware.use OmniAuth::Builder do
+  OmniAuth::MultiProvider.register(self,
+                                   provider_name: :saml,
+                                   identity_provider_id_regex: /\w+/,
+                                   path_prefix: '/auth/saml',
+                                   callback_suffix: 'callback',
+                                   # Specify any additional provider specific options
+                                   name_identifier_format: 'urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress',
+                                   issuer: 'apollo.io',
+                                   allowed_clock_drift: 5.seconds) do |identity_provider_id, rack_env|
+    # identity_provider = SAML::IdentityProvider.find(identity_provider_id)
+
+    # rack_env['apollo.saml_identity_provider'] = identity_provider
+    # identity_provider.options
+    SAML_SETTINGS[identity_provider_id.to_sym]
   end
 end
 

@@ -12,6 +12,25 @@ class ArticlesController < ApplicationController
     print(request.env['omniauth.auth'].uid) # request.env['omniauth.auth'] contains already decoded saml response
     redirect_to action: "index"
   end
+  def saml_settings(tenant_settings)
+    settings = OneLogin::RubySaml::Settings.new
+
+    # You provide to IDP
+    settings.assertion_consumer_service_url = "http://#{request.host_with_port}/auth/saml/#{tenant_settings[:sp_entity_id]}"
+    settings.sp_entity_id                   = tenant_settings[:sp_entity_id]
+
+    # IDP provides to you
+    settings.idp_sso_target_url             = tenant_settings[:idp_sso_service_url]
+    settings.idp_cert                       = tenant_settings[:idp_cert]
+
+    settings
+  end
+  def sp_initiated_login
+    request = OneLogin::RubySaml::Authrequest.new
+    tenant_settings = SAML_SETTINGS[params[:identity_provider_id].to_sym]
+
+    redirect_to(request.create(saml_settings tenant_settings), allow_other_host: true)
+  end
   def show
     @article = Article.find(params[:id])
   end
