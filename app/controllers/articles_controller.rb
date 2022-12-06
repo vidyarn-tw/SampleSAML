@@ -7,10 +7,12 @@ class ArticlesController < ApplicationController
   end
   def saml_callback
     @articles = Article.all
+    @user = request.env['omniauth.auth'].uid
+    @team = request.env['omniauth.auth'][:extra][:raw_info][:team]
     # render "articles/index"
     # print(Hash.from_xml(Base64.decode64(request.params[:SAMLResponse])))
     print(request.env['omniauth.auth'].uid) # request.env['omniauth.auth'] contains already decoded saml response
-    redirect_to action: "index"
+    render action: "home"
   end
   def saml_settings(tenant_settings)
     settings = OneLogin::RubySaml::Settings.new

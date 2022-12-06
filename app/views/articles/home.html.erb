@@ -1,0 +1,7 @@
+<h1>Welcome, <%= @user %></h1>
+
+<% if @team %>
+  <h3> You belong to team ,  <b><%= @team %></b></h3>
+<% else %>
+  <h3> You dont belong to any team</h3>
+<% end %>
