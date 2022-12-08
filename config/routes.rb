@@ -20,7 +20,8 @@ Rails.application.routes.draw do
         as: 'user_omniauth_authorize'
 
   namespace :scim do
-    Scimitar::Engine => '/'
+    mount Scimitar::Engine, at: '/'
+
     get 'Users', to: 'users#index'
     get 'Users/:id', to: 'users#show', as: :user
     post 'Users', to: 'users#create'

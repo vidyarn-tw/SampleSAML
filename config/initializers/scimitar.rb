@@ -1,8 +1,6 @@
-Rails.application.config.to_prepare do
-  Scimitar.engine_configuration = Scimitar::EngineConfiguration.new({
-    basic_authenticator: Proc.new do |  username, password |
-      puts username, password
 
-    end
-  })
-end
+Scimitar.engine_configuration = Scimitar::EngineConfiguration.new({
+  basic_authenticator: Proc.new do |  username, password |
+    username == 'naeemshaikh27@gmail.com' && password == 'Admin1234'
+  end
+})
