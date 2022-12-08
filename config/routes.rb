@@ -20,12 +20,12 @@ Rails.application.routes.draw do
         as: 'user_omniauth_authorize'
 
   namespace :scim do
+    Scimitar::Engine => '/'
     get 'Users', to: 'users#index'
     get 'Users/:id', to: 'users#show', as: :user
     post 'Users', to: 'users#create'
     put 'Users/:id', to: 'users#update'
     delete 'Users/:id', to: 'users#destroy'
 
-    mount ScimEngine::Engine => '/'
   end
 end
