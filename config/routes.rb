@@ -18,4 +18,14 @@ Rails.application.routes.draw do
         via: [:get, :post],
         to: 'articles#sp_initiated_login',
         as: 'user_omniauth_authorize'
+
+  namespace :scim do
+    get 'Users', to: 'users#index'
+    get 'Users/:id', to: 'users#show', as: :user
+    post 'Users', to: 'users#create'
+    put 'Users/:id', to: 'users#update'
+    delete 'Users/:id', to: 'users#destroy'
+
+    mount ScimEngine::Engine => '/'
+  end
 end

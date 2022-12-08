@@ -7,6 +7,8 @@ gem 'omniauth-saml'
 
 gem 'omniauth-multi-provider'
 
+gem 'scim_engine'
+
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem "rails", "~> 7.0.4"
 
