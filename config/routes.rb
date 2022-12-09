@@ -8,5 +8,26 @@ Rails.application.routes.draw do
   end
   # get "articles", to: "articles#index"
   # get "articles/:id", to: "articles#show"
-  post "auth/saml/callback", to: "articles#saml_callback"
+
+  match '/auth/saml/:identity_provider_id/callback',
+        via: [:get, :post],
+        to: 'articles#saml_callback',
+        as: 'user_omniauth_callback'
+
+  match '/auth/saml/:identity_provider_id',
+        via: [:get, :post],
+        to: 'articles#sp_initiated_login',
+        as: 'user_omniauth_authorize'
+
+  namespace :scim do
+    mount Scimitar::Engine, at: '/'
+
+    get    'Users',     to: 'users#index'
+    get    'Users/:id', to: 'users#show'
+    post   'Users',     to: 'users#create'
+    put    'Users/:id', to: 'users#replace'
+    patch  'Users/:id', to: 'users#update'
+    delete 'Users/:id', to: 'users#destroy'
+
+  end
 end
