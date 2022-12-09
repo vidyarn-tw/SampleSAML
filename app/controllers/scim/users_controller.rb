@@ -52,7 +52,7 @@ module Scim
     end
 
     def create
-      super do |scim_resource|
+      super do |scim_resource, t, l|
         # Create an instance based on the Scimitar::Resources::User in
         # "scim_resource" (or whatever your ::storage_class() defines via its
         # ::scim_resource_type class method).
@@ -70,7 +70,7 @@ module Scim
         # "scim_resource" (or whatever your ::storage_class() defines via its
         # ::scim_resource_type class method). For example:
         record = self.find_user(record_id)
-        scim_resource.meta = nil  # this is a patch, couldn't get working without this
+        scim_resource.meta = nil  # TODO: this is a patch, couldn't get working without this
         record.from_scim!(scim_hash: scim_resource.as_json)
         self.save!(record)
         # Evaluate to the record as a SCIM object (or do that via "self.save!")

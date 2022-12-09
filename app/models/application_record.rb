@@ -1,3 +1,3 @@
 class ApplicationRecord < ActiveRecord::Base
-  primary_abstract_class
+  self.abstract_class = true # this is different in rails 7 and rails 6
 end
