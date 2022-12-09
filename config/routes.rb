@@ -22,10 +22,11 @@ Rails.application.routes.draw do
   namespace :scim do
     mount Scimitar::Engine, at: '/'
 
-    get 'Users', to: 'users#index'
-    get 'Users/:id', to: 'users#show', as: :user
-    post 'Users', to: 'users#create'
-    put 'Users/:id', to: 'users#update'
+    get    'Users',     to: 'users#index'
+    get    'Users/:id', to: 'users#show'
+    post   'Users',     to: 'users#create'
+    put    'Users/:id', to: 'users#replace'
+    patch  'Users/:id', to: 'users#update'
     delete 'Users/:id', to: 'users#destroy'
 
   end

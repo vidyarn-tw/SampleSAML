@@ -15,18 +15,20 @@ module Scim
 
     def index
       # There's a degree of heavy lifting for arbitrary storage engines.
-      # query = if params[:filter].present?
-      #           attribute_map = User.new.scim_queryable_attributes() # Note use of *instance* method
-      #           parser        = Scimitar::Lists::QueryParser.new(attribute_map)
-      #
-      #           parser.parse(params[:filter])
-      #           # Then use 'parser' to read e.g. #tree or #rpn and turn this into a
-      #           # query object for your storage engine. With ActiveRecord, you could
-      #           # just do: parser.to_activerecord_query(base_scope)
-      #         else
-      #           # Return a query object for 'all results' (e.g. User.all).
-      #         end
-      query = User.none # or User.all
+      query = if params[:filter].present?
+                attribute_map = User.new.scim_queryable_attributes() # Note use of *instance* method
+                parser        = Scimitar::Lists::QueryParser.new(attribute_map)
+
+                parser.parse(params[:filter])
+                # Then use 'parser' to read e.g. #tree or #rpn and turn this into a
+                # query object for your storage engine. With ActiveRecord, you could
+                # just do: parser.to_activerecord_query(base_scope)
+                parser.to_activerecord_query(self.storage_scope)
+              else
+                # Return a query object for 'all results' (e.g. User.all).
+                User.all
+              end
+       # or User.all
 
       # Assuming the 'query' object above had ActiveRecord-like semantics,
       # you'd create a Scimitar::Lists::Count object with total count filled in
@@ -58,7 +60,7 @@ module Scim
         record.from_scim!(scim_hash: scim_resource.as_json())
         self.save!(record)
         # Evaluate to the record as a SCIM object (or do that via "self.save!")
-        user.to_scim(location: url_for(action: :show, id: record.id))
+        record.to_scim(location: url_for(action: :show, id: record.id))
       end
     end
 
@@ -67,11 +69,12 @@ module Scim
         # Fully update an instance based on the Scimitar::Resources::User in
         # "scim_resource" (or whatever your ::storage_class() defines via its
         # ::scim_resource_type class method). For example:
-        record = self.find_record(record_id)
-        record.from_scim!(scim_hash: scim_resource.as_json())
+        record = self.find_user(record_id)
+        scim_resource.meta = nil  # this is a patch, couldn't get working without this
+        record.from_scim!(scim_hash: scim_resource.as_json)
         self.save!(record)
         # Evaluate to the record as a SCIM object (or do that via "self.save!")
-        user.to_scim(location: url_for(action: :show, id: record_id))
+        record.to_scim(location: url_for(action: :show, id: record_id))
       end
     end
 
@@ -80,11 +83,11 @@ module Scim
         # Partially update an instance based on the PATCH payload *Hash* given
         # in "patch_hash" (note that unlike the "scim_resource" parameter given
         # to blocks in #create or #replace, this is *not* a high-level object).
-        record = self.find_record(record_id)
+        record = self.find_user(record_id)
         record.from_scim_patch!(patch_hash: patch_hash)
         self.save!(record)
         # Evaluate to the record as a SCIM object (or do that via "self.save!")
-        user.to_scim(location: url_for(action: :show, id: record_id))
+        record.to_scim(location: url_for(action: :show, id: record_id))
       end
     end
 
@@ -103,7 +106,9 @@ module Scim
     def storage_class
       User
     end
-
+    def storage_scope
+      User.all # Or e.g. "User.where(is_deleted: false)" - whatever base scope you require
+    end
     # Find your user. The +id+ parameter is one of YOUR identifiers, which
     # are returned in "id" fields in JSON responses via SCIM schema. If the
     # remote caller (client) doesn't want to remember your IDs and hold a
@@ -112,8 +117,13 @@ module Scim
     #
     def find_user(id)
       # Find records by your ID here.
+      User.find_by(id: id)
     end
 
+    def find_by_email(email)
+      # Find records by your ID here.
+      User.find_by(email: email)
+    end
     # Persist 'user' - for example, if we *were* using ActiveRecord...
     #
     def save!(user)

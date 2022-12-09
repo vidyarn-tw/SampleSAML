@@ -8,41 +8,41 @@ class User < ActiveRecord::Base
     return {
       id:         :id,
       externalId: :scim_uid,
-      userName:   :username,
+      userName:   :email,
       name:       {
-        givenName:  :first_name,
+        givenName:  :name,
         familyName: :last_name
       },
-      emails: [
-        {
-          match: 'type',
-          with:  'work',
-          using: {
-            value:   :work_email_address,
-            primary: true
-          }
-        },
-        {
-          match: 'type',
-          with:  'home',
-          using: {
-            value:   :home_email_address,
-            primary: false
-          }
-        },
-      ],
-      phoneNumbers: [
-        {
-          match: 'type',
-          with:  'work',
-          using: {
-            value:   :work_phone_number,
-            primary: false
-          }
-        },
-      ],
+      # emails: [
+      #   {
+      #     match: 'type',
+      #     with:  'work',
+      #     using: {
+      #       value:   :work_email_address,
+      #       primary: true
+      #     }
+      #   },
+      #   {
+      #     match: 'type',
+      #     with:  'home',
+      #     using: {
+      #       value:   :home_email_address,
+      #       primary: false
+      #     }
+      #   },
+      # ],
+      # phoneNumbers: [
+      #   {
+      #     match: 'type',
+      #     with:  'work',
+      #     using: {
+      #       value:   :work_phone_number,
+      #       primary: false
+      #     }
+      #   },
+      # ],
 
-      active: :is_active
+      active: true
     }
   end
 
@@ -52,9 +52,7 @@ class User < ActiveRecord::Base
 
   def self.scim_queryable_attributes
     return {
-      givenName:  :first_name,
-      familyName: :last_name,
-      emails:     :work_email_address,
+      'userName' => {column: :email}
     }
   end
 
