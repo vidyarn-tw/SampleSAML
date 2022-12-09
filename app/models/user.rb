@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
         givenName:  :name,
         familyName: :last_name
       },
+      apolloTeam: :team,
       # emails: [
       #   {
       #     match: 'type',
@@ -42,7 +43,7 @@ class User < ActiveRecord::Base
       #   },
       # ],
 
-      active: true
+      active: :active
     }
   end
 
@@ -52,7 +53,7 @@ class User < ActiveRecord::Base
 
   def self.scim_queryable_attributes
     return {
-      'userName' => {column: :email}
+      'userName' => {column: :email} # this should have worked with userName :  :email as symbol, but somehow breaks and needs string 'userName'
     }
   end
 
